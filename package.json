@@ -1,10 +1,10 @@
 {
   "name": "@djeka07/nestjs-meilisearch",
-  "version": "0.0.1",
+  "version": "0.0.14",
   "description": "A wrapper around meilisearch for NestJS",
   "author": "André Ekbom",
-  "private": false,
   "license": "MIT",
+  "main": "./dist/index.js",
   "files": [
     "dist/**/*",
     "src/**/*",
@@ -22,11 +22,14 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/djeka07/nestjs-meilisearch.git"
-  },  
+  },
   "keywords": [
     "nestjs",
     "meilisearch"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "@nestjs/common": "^10.4.3",
     "meilisearch": "^0.42.0"

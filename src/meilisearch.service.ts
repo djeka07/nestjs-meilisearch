@@ -9,6 +9,9 @@ import {
   Index,
   IndexOptions,
   MeiliSearch,
+  ResourceResults,
+  Task,
+  TasksResults,
 } from 'meilisearch';
 import { InjectMeiliSearch } from './meilisearch.decorators';
 
@@ -29,6 +32,14 @@ export class MeiliSearchService {
     return await this.meiliSearchClient.createIndex(name, options);
   }
 
+  async getTask(taskUid: number): Promise<Task> {
+    return this.meiliSearchClient.getTask(taskUid);
+  }
+
+  async getTasks(): Promise<TasksResults> {
+    return this.meiliSearchClient.getTasks();
+  }
+
   async updateIndex(
     name: string,
     options?: IndexOptions,
@@ -44,9 +55,9 @@ export class MeiliSearchService {
     return await this.meiliSearchClient.deleteIndexIfExists(name);
   }
 
-  async addDocuments(
+  async addDocuments<T extends Record<string, any>>(
     index: string,
-    documents: Array<Record<string, any>>,
+    documents: Array<T>,
     options?: DocumentOptions,
   ): Promise<EnqueuedTask> {
     return await this.meiliSearchClient
@@ -54,18 +65,18 @@ export class MeiliSearchService {
       .addDocuments(documents, options);
   }
 
-  async getDocuments(
+  async getDocuments<T extends Record<string, any>>(
     index: string,
-    parameters?: DocumentsQuery<Record<string, any>>,
-  ): Promise<any> {
+    parameters?: DocumentsQuery<T>,
+  ): Promise<ResourceResults<T[]>> {
     return await (
       await this.meiliSearchClient.getIndex(index)
     ).getDocuments(parameters);
   }
 
-  async updateDocuments(
+  async updateDocuments<T extends Record<string, any>>(
     index: string,
-    documents: Array<Partial<Record<string, any>>>,
+    documents: Array<Partial<T>>,
   ): Promise<EnqueuedTask> {
     return await this.meiliSearchClient.index(index).updateDocuments(documents);
   }

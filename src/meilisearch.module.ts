@@ -25,7 +25,7 @@ export class MeiliSearchModule {
     return {
       module: MeiliSearchModule,
       providers: [meiliOptions, connectionProvider, MeiliSearchService],
-      exports: [connectionProvider, MeiliSearchService],
+      exports: [MeiliSearchService],
     };
   }
 
@@ -42,17 +42,13 @@ export class MeiliSearchModule {
     const connectionProvider: Provider = {
       provide: MEILI_CLIENT,
       useFactory: async (...args: any[]) => {
-        const factoryOptions = await options.useFactory(args);
+        const factoryOptions = await options.useFactory(...args);
         return this.createConnectionFactory(factoryOptions);
       },
+      inject: options.inject || [],
     };
     return [
-      connectionProvider,
-      {
-        provide: MEILI_MODULE_OPTIONS,
-        useFactory: options.useFactory,
-        inject: options.inject || [],
-      },
+      connectionProvider
     ];
   }
 }
